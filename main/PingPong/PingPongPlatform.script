@@ -2,9 +2,10 @@ local debugger = nil;
 
 function init(self)
 	debugger = Debugger:new()
-	debugger.scriptName = tostring(msg.url(self.url))
-	print("Test")
-	debugger:printer("Test")
+	debugger:printer(1, "Test")
+	debugger:printer(self)
+	debugger:printerinit(self, "Test1")
+	debugger:printer("Test2")
 end
 
 --[[function final(self)

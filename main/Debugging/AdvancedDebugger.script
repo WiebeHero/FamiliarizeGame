@@ -18,8 +18,27 @@ function Debugger:new(o)
 	return o;
 end
 
-function Debugger:printer(message)
+function Debugger:printerinit(target, text1)
+	self.scriptName = tostring(msg.url(target.url));
 	local strippedScriptName = string.sub(self.scriptName, 6);
-	print(strippedScriptName .. ": " .. message .. " | Printed from: " .. debug.getinfo(2).currentline)
+	print(strippedScriptName .. ": " .. text1 .. " | Printed from: " .. debug.getinfo(2).currentline)
 end
+
+function Debugger:printer(text2)
+	if type(text2) ~= "string" and self.scriptName == nil or #self.scriptName == 0 then
+		print("The debugger does not have enough info to formulate properly.")
+		print("Attempting to print possible source...")
+		if type(text2) == "userdata" then
+			local possibleSource = tostring(msg.url(text2.url));
+			print("Source found! Printing source: " .. string.sub(possibleSource, 6))
+		else
+			print("Source could not be found.")
+		end
+	else
+		local strippedScriptName = string.sub(self.scriptName, 6);
+		print(strippedScriptName .. ": " .. text2 .. " | Printed from: " .. debug.getinfo(2).currentline)
+	end
+end
+
+	
 
