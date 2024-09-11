@@ -2,11 +2,11 @@ local debugger = nil;
 
 function init(self)
 	debugger = Debugger:new()
-	debugger.scriptName = tostring(msg.url(self.url));
-	debugger:printer("test")
+	debugger.scriptName = tostring(msg.url(self.url))
+	debugger:printer("Test")
 end
 
-function final(self)
+--[[function final(self)
 	
 end
 
@@ -24,3 +24,4 @@ end
 
 function on_reload(self)
 end
+]]

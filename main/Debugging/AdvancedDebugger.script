@@ -19,6 +19,7 @@ function Debugger:new(o)
 end
 
 function Debugger:printer(message)
-	print(self.scriptName .. ": " .. message)
+	local strippedScriptName = string.sub(self.scriptName, 6);
+	print(strippedScriptName .. ": " .. message .. " | Printed from: " .. debug.getinfo(2).currentline)
 end
 
