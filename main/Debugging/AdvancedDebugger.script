@@ -1,0 +1,23 @@
+go.property("shouldDebug", false)
+local IndexedSelf = nil
+Debugger = {scriptName = "", shouldDebug = false}
+
+function init(self)
+	IndexedSelf = self;
+end
+
+function Debugger:new(o)
+	o = o or {}
+	setmetatable(o, self)
+	self.__index = self
+	if IndexedSelf == nil then
+		return
+	end
+	self.shouldDebug = IndexedSelf.shouldDebug
+	return o;
+end
+
+function Debugger:printer(message)
+	print(self.scriptName .. ": " .. message)
+end
+
