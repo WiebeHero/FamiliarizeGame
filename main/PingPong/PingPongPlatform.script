@@ -4,6 +4,7 @@ function init(self)
 	debugger = Debugger:new()
 	debugger.scriptName = tostring(msg.url(self.url))
 	debugger:printer("Test")
+	pprint("Test")
 end
 
 --[[function final(self)
