@@ -1,3 +1,4 @@
+--An advanced debugger class.
 go.property("shouldDebug", false)
 local IndexedSelf = nil
 Debugger = {scriptName = "", shouldDebug = false}
