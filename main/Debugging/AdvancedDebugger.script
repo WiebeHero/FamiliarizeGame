@@ -1,44 +1,54 @@
 --An advanced debugger class.
 go.property("shouldDebug", false)
-local IndexedSelf = nil
 Debugger = {scriptName = "", shouldDebug = false}
 
 function init(self)
-	IndexedSelf = self;
+	print("Assigning advanced debugger...")
+	indexedSelf = self
 end
 
 function Debugger:new(o)
 	o = o or {}
 	setmetatable(o, self)
 	self.__index = self
-	if IndexedSelf == nil then
+	if indexedSelf == nil then
+		print("Indexed self is null!")
 		return
 	end
-	self.shouldDebug = IndexedSelf.shouldDebug
-	return o;
+	self.shouldDebug = indexedSelf.shouldDebug
+	return o
 end
 
-function Debugger:printerinit(target, text1)
-	self.scriptName = tostring(msg.url(target.url));
-	local strippedScriptName = string.sub(self.scriptName, 6);
-	print(strippedScriptName .. ": " .. text1 .. " | Printed from: " .. debug.getinfo(2).currentline)
+function Debugger:printerinit(target, message)
+	if not self.shouldDebug then
+		return
+	end
+	self.scriptName = tostring(msg.url(target.url))
+	local strippedScriptName = string.sub(self.scriptName, 6)
+	print(strippedScriptName .. ": " .. message .. " | Printed from: " .. debug.getinfo(2).currentline)
 end
 
-function Debugger:printer(text2)
-	if type(text2) ~= "string" and self.scriptName == nil or #self.scriptName == 0 then
+function Debugger:printer(message)
+	print(self.shouldDebug)
+	if not self.shouldDebug then
+		return
+	end
+	if type(message) ~= "string" and self.scriptName == nil or #self.scriptName == 0 then
 		print("The debugger does not have enough info to formulate properly.")
 		print("Attempting to print possible source...")
-		if type(text2) == "userdata" then
-			local possibleSource = tostring(msg.url(text2.url));
+		if type(message) == "userdata" then
+			local possibleSource = tostring(msg.url(message.url));
 			print("Source found! Printing source: " .. string.sub(possibleSource, 6))
 		else
 			print("Source could not be found.")
 		end
 	else
 		local strippedScriptName = string.sub(self.scriptName, 6);
-		print(strippedScriptName .. ": " .. text2 .. " | Printed from: " .. debug.getinfo(2).currentline)
+		print(strippedScriptName .. ": " .. message .. " | Printed from: " .. debug.getinfo(2).currentline)
 	end
 end
+
+
 
 	
 

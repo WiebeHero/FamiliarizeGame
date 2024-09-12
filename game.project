@@ -8,10 +8,6 @@ main_collection = /main/main.collectionc
 game_binding = /input/game.input_bindingc
 use_accelerometer = 0
 
-[display]
-width = 1280
-height = 720
-
 [script]
 shared_state = 1
 
@@ -25,7 +21,7 @@ app_icon = /assets/app_icons/appicon.icns
 input_method = HiddenInputField
 
 [physics]
-gravity_y = -1000.0
+gravity_y = 0.0
 scale = 0.01
 velocity_threshold = 100.0
 
