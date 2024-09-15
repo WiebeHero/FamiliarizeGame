@@ -3,15 +3,22 @@ debugger = nil
 local scoreLeft, scoreRight
 
 function init(self)
-	msg.post(".", "actual_init")
-end
-
-function on_message(self, message_id, message, sender)
 	debugger = Debugger:new()
 	debugger:printerinit(self, "Starting ping pong manager...")
 	scoreLeft = 0
 	scoreRight = 0
 	debugger:printer("Ping pong manager started!")
+	msg.post(".", "acquire_input_focus")
+end
+
+function on_message(self, message_id, message, sender)
+	
+end
+
+function on_input(self, action_id, action)
+	if action_id == nil then
+		return
+	end
 end
 
 --[[function final(self)
@@ -28,8 +35,7 @@ end
 function on_message(self, message_id, message, sender)
 end
 
-function on_input(self, action_id, action)
-end
+
 
 function on_reload(self)
 end]]

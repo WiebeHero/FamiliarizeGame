@@ -1,21 +1,18 @@
 --An advanced debugger class.
 go.property("shouldDebug", false)
-Debugger = {scriptName = "", shouldDebug = false}
+Debugger = {scriptName = {}, shouldDebug = false}
 
 function init(self)
 	print("Assigning advanced debugger...")
-	indexedSelf = self
 end
 
 function Debugger:new(o)
 	o = o or {}
 	setmetatable(o, self)
 	self.__index = self
-	if indexedSelf == nil then
-		print("Indexed self is null!")
-		return
-	end
-	self.shouldDebug = indexedSelf.shouldDebug
+	local urlAdvnacedDebugger = msg.url(nil, nil, "AdvancedDebugger")
+	local shouldDebug = go.get(urlAdvnacedDebugger, "shouldDebug")
+	self.shouldDebug = shouldDebug
 	return o
 end
 
@@ -23,13 +20,12 @@ function Debugger:printerinit(target, message)
 	if not self.shouldDebug then
 		return
 	end
-	self.scriptName = tostring(msg.url(target.url))
-	local strippedScriptName = string.sub(self.scriptName, 6)
+	self.scriptName[#self.scriptName + 1] = msg.url(target.url)
+	local strippedScriptName = string.sub(tostring(self.scriptName[#self.scriptName]), 6)
 	print(strippedScriptName .. ": " .. message .. " | Printed from: " .. debug.getinfo(2).currentline)
 end
 
 function Debugger:printer(message)
-	print(self.shouldDebug)
 	if not self.shouldDebug then
 		return
 	end
@@ -43,8 +39,12 @@ function Debugger:printer(message)
 			print("Source could not be found.")
 		end
 	else
-		local strippedScriptName = string.sub(self.scriptName, 6);
-		print(strippedScriptName .. ": " .. message .. " | Printed from: " .. debug.getinfo(2).currentline)
+		for i = 1, #self.scriptName do
+			if self.scriptName[i] == msg.url(self.url) then
+				local strippedScriptName = string.sub(tostring(self.scriptName[i]), 6)
+				print(strippedScriptName .. ": " .. message .. " | Printed from: " .. debug.getinfo(2).currentline)
+			end
+		end
 	end
 end
 
