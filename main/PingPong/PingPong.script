@@ -1,4 +1,7 @@
-go.property("CollisionObjectUrl", msg.url())
+go.property("ControlLeft", hash("A"))
+go.property("ControlRight", hash(""))
+go.property("ControlLeft", hash(""))
+go.property("ControlLeft", hash(""))
 go.property("ShouldInput", false)
 local debugger
 local controls
@@ -10,9 +13,6 @@ function init(self)
 	debugger:printerinit(self, "Starting ping pong script...")
 	debugger:printer("Printing self: " .. tostring(msg.url(self.url)))
 	debugger:printer("Ping pong script started!")
-	timer.delay(3, false, function()
-		debugger:printer("I am here.")
-	end)
 	msg.post(".", "acquire_input_focus")
 end
 
@@ -41,7 +41,10 @@ function on_input(self, action_id, action)
 		return false
 	end
 	debugger:printer("Printing action id: " .. action_id)
-	debugger:printer(tostring(msg.url(nil)))
+	for k, v in pairs(action) do 
+		debugger:printer("Printing key: " .. tostring(k))
+		debugger:printer("Printing value: " .. tostring(v))
+	end
 	return false
 end
 

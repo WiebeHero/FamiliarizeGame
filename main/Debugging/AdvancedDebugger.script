@@ -2,10 +2,6 @@
 go.property("shouldDebug", false)
 Debugger = {scriptName = {}, shouldDebug = false}
 
-function init(self)
-	print("Assigning advanced debugger...")
-end
-
 function Debugger:new(o)
 	o = o or {}
 	setmetatable(o, self)
