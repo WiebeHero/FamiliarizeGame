@@ -1,30 +1,24 @@
 --An advanced debugger class.
 go.property("shouldDebug", false)
-Debugger = {scriptName = {}, shouldDebug = false}
+Debugger = {scriptName = {}, shouldDebug = {}}
 
 function Debugger:new(o)
 	o = o or {}
 	setmetatable(o, self)
 	self.__index = self
-	local urlAdvnacedDebugger = msg.url(nil, nil, "AdvancedDebugger")
-	local shouldDebug = go.get(urlAdvnacedDebugger, "shouldDebug")
-	self.shouldDebug = shouldDebug
 	return o
 end
 
 function Debugger:printerinit(target, message)
-	if not self.shouldDebug then
-		return
-	end
+	local urlAdvnacedDebugger = msg.url(nil, nil, "AdvancedDebugger")
+	local shouldDebug = go.get(urlAdvnacedDebugger, "shouldDebug")
+	self.shouldDebug[#self.shouldDebug + 1] = shouldDebug
 	self.scriptName[#self.scriptName + 1] = msg.url(target.url)
 	local strippedScriptName = string.sub(tostring(self.scriptName[#self.scriptName]), 6)
-	print(strippedScriptName .. ": " .. message .. " | Printed from: " .. debug.getinfo(2).currentline)
+	print(strippedScriptName.. " | Printed from: " .. debug.getinfo(2).currentline .. ": " .. message)
 end
 
 function Debugger:printer(message)
-	if not self.shouldDebug then
-		return
-	end
 	if type(message) ~= "string" and self.scriptName == nil or #self.scriptName == 0 then
 		print("The debugger does not have enough info to formulate properly.")
 		print("Attempting to print possible source...")
@@ -37,8 +31,10 @@ function Debugger:printer(message)
 	else
 		for i = 1, #self.scriptName do
 			if self.scriptName[i] == msg.url(self.url) then
-				local strippedScriptName = string.sub(tostring(self.scriptName[i]), 6)
-				print(strippedScriptName .. ": " .. message .. " | Printed from: " .. debug.getinfo(2).currentline)
+				if self.shouldDebug[i] then
+					local strippedScriptName = string.sub(tostring(self.scriptName[i]), 6)
+					print(strippedScriptName .. " | Printed from: " .. debug.getinfo(2).currentline .. ": " .. message)
+				end
 			end
 		end
 	end

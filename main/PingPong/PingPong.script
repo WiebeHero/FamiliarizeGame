@@ -1,6 +1,7 @@
 require("main.Helpers.HashHelper")
-go.property("ShouldInput", false)
 go.property("PlayerNumber", 0)
+go.property("Speed", 0)
+go.property("MaxSpeed", 0)
 local storedInput = {Id = {}, Input = {}}
 local debugger
 
@@ -29,24 +30,40 @@ function update(self, dt)
 end
 
 function fixed_update(self, dt)
-	--debugger:printer("Entering fixed update...")
-	--debugger:printer("Self Url: " .. tostring(msg.url(self.url)))
-	--debugger:printer("Other Url: " .. tostring(msg.url(storedInput.Id)))
-	debugger:printer(go.get(nil, "PlayerNumber"))
-	debugger:printer(tostring(storedInput.Id[go.get(nil, "PlayerNumber")]))
 	local playerNumber = go.get(nil, "PlayerNumber")
-	if msg.url(self.url) == storedInput.Id[playerNumber] then
-		debugger:printer("The same identity has been found!")
-		local collisionUrl = msg.url(nil, nil, "collisionobject")
-		if storedInput.Input[playerNumber] == "Up" then
-			debugger:printer("Going up!")
-			local collisionObject = go.set(collisionUrl, "linear_velocity", vmath.vector3(0, 100, 0))
-		end
+	if msg.url(self.url) ~= storedInput.Id[playerNumber] then
+		return
 	end
-end
-
-function on_message(self, message_id, message, sender)
-	
+	debugger:printer("The same identity has been found!")
+	local collisionUrl = msg.url(nil, nil, "collisionobject")
+	local vector3 = go.get(collisionUrl, "linear_velocity")
+	debugger:printer("Velocity: X: " .. vector3.x .. " Y: " .. vector3.y .. " Z: " .. vector3.z)
+	local didInput = false
+	local speed, maxSpeed = self.Speed, self.MaxSpeed
+	debugger:printer("Speed: " .. speed .. " MaxSpeed: " .. maxSpeed)
+	if storedInput.Input[playerNumber] == "Up" then
+		debugger:printer("Going up!")
+		vector3.y = vector3.y + speed
+		if vector3.y > maxSpeed then
+			vector3.y = maxSpeed
+		end
+		go.set(collisionUrl, "linear_velocity", vector3)
+		storedInput.Input[playerNumber] = ""
+		didInput = true
+	end
+	if storedInput.Input[playerNumber] == "Down" then
+		debugger:printer("Going down!")
+		vector3.y = vector3.y - speed
+		if vector3.y < -maxSpeed then
+			vector3.y = -maxSpeed
+		end
+		go.set(collisionUrl, "linear_velocity", vector3)
+		storedInput.Input[playerNumber] = ""
+		didInput = true
+	end
+	if didInput then
+		return
+	end
 end
 
 function on_input(self, action_id, action)
@@ -66,6 +83,10 @@ function on_input(self, action_id, action)
 		storedInput.Input[playerNumber] = action_id_stripped
 	end
 	return false
+end
+
+function on_message(self, message_id, message, sender)
+	
 end
 
 function on_reload(self)

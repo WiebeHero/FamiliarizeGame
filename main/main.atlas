@@ -10,4 +10,7 @@ images {
 images {
   image: "/assets/images/PingPongBar.png"
 }
+images {
+  image: "/assets/images/Ball.png"
+}
 extrude_borders: 2

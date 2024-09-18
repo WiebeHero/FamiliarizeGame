@@ -1,0 +1,47 @@
+script: "/main/Gui/IngameGUI.gui_script"
+fonts {
+  name: "default"
+  font: "/builtins/fonts/default.font"
+}
+nodes {
+  position {
+    x: 98.0
+    y: 667.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  text: "Score: 0"
+  font: "default"
+  id: "Player1Score"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 1177.0
+    y: 667.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  text: "Score: 0"
+  font: "default"
+  id: "Player2Score"
+  inherit_alpha: true
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

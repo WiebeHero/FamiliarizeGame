@@ -1,0 +1,46 @@
+go.property("Speed", 0)
+go.property("SpeedMultiplier", 0)
+local debugger
+
+function init(self)
+	if debugger == nil then
+		debugger = Debugger:new()
+	end
+	debugger:printerinit(self, "Starting ping pong ball script")
+	local vector3 = vmath.vector3(self.Speed, 0, 0)
+	local collisionUrl = msg.url(nil, nil, "collisionobject")
+	go.set(collisionUrl, "linear_velocity", vector3)
+	debugger:printer(tostring(msg.url()))
+	msg.post("main:/Gui#PingPongData", "Test", {Test = "Test"})
+end
+
+function fixed_update(self, dt)
+	local collisionUrl = msg.url(nil, nil, "collisionobject")
+	local velocity = go.get(collisionUrl, "linear_velocity")
+	local newVelocity = velocity * (1 + self.SpeedMultiplier)
+	go.set(collisionUrl, "linear_velocity", newVelocity)
+end
+
+function on_message(self, message_id, message, sender)
+	debugger:printer("Message identification: " .. message_id)
+	if message_id ~= hash("contact_point_response") then
+		return
+	end
+	debugger:printer("Other group: " .. tostring(message.other_group))
+	if message.other_group ~= hash("Pong") then
+		return
+	end
+	debugger:printer("Collision occured!")
+	local collisionUrl = msg.url(nil, nil, "collisionobject")
+	local vector3 = go.get(collisionUrl, "linear_velocity")
+	debugger:printer("Normal: " .. message.normal)
+	math.randomseed(os.time())
+	go.set(collisionUrl, "linear_velocity", rotate_vector(message.normal * vmath.length(go.get(collisionUrl, "linear_velocity")), math.random(150) - 75))
+end
+
+function rotate_vector(vector3, degrees)
+	local degrees = math.rad(degrees)
+	local newX = vector3.x * math.cos(degrees) - vector3.y * math.sin(degrees)
+	local newY = vector3.x * math.sin(degrees) + vector3.y * math.cos(degrees)
+	return vmath.vector3(newX, newY, 0.0)
+end
