@@ -1,34 +1,34 @@
 key_trigger {
   input: KEY_W
-  action: "Up"
+  action: "Up-1"
 }
 key_trigger {
   input: KEY_A
-  action: "Left"
+  action: "Left-1"
 }
 key_trigger {
   input: KEY_S
-  action: "Down"
+  action: "Down-1"
 }
 key_trigger {
   input: KEY_D
-  action: "Right"
+  action: "Right-1"
 }
 key_trigger {
   input: KEY_UP
-  action: "Up"
+  action: "Up-2"
 }
 key_trigger {
   input: KEY_LEFT
-  action: "Left"
+  action: "Left-2"
 }
 key_trigger {
   input: KEY_DOWN
-  action: "Down"
+  action: "Down-2"
 }
 key_trigger {
   input: KEY_RIGHT
-  action: "Right"
+  action: "Right-2"
 }
 mouse_trigger {
   input: MOUSE_BUTTON_LEFT

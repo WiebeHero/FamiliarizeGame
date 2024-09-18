@@ -1,10 +1,8 @@
-go.property("ControlLeft", hash("A"))
-go.property("ControlRight", hash(""))
-go.property("ControlLeft", hash(""))
-go.property("ControlLeft", hash(""))
+require("main.Helpers.HashHelper")
 go.property("ShouldInput", false)
+go.property("PlayerNumber", 0)
+local storedInput = {Id = {}, Input = {}}
 local debugger
-local controls
 
 function init(self)
 	if debugger == nil then
@@ -13,6 +11,8 @@ function init(self)
 	debugger:printerinit(self, "Starting ping pong script...")
 	debugger:printer("Printing self: " .. tostring(msg.url(self.url)))
 	debugger:printer("Ping pong script started!")
+	storedInput.Id[#storedInput.Id + 1] = msg.url(self.url)
+	storedInput.Input[#storedInput.Input + 1] = nil
 	msg.post(".", "acquire_input_focus")
 end
 
@@ -29,7 +29,20 @@ function update(self, dt)
 end
 
 function fixed_update(self, dt)
-	
+	--debugger:printer("Entering fixed update...")
+	--debugger:printer("Self Url: " .. tostring(msg.url(self.url)))
+	--debugger:printer("Other Url: " .. tostring(msg.url(storedInput.Id)))
+	debugger:printer(go.get(nil, "PlayerNumber"))
+	debugger:printer(tostring(storedInput.Id[go.get(nil, "PlayerNumber")]))
+	local playerNumber = go.get(nil, "PlayerNumber")
+	if msg.url(self.url) == storedInput.Id[playerNumber] then
+		debugger:printer("The same identity has been found!")
+		local collisionUrl = msg.url(nil, nil, "collisionobject")
+		if storedInput.Input[playerNumber] == "Up" then
+			debugger:printer("Going up!")
+			local collisionObject = go.set(collisionUrl, "linear_velocity", vmath.vector3(0, 100, 0))
+		end
+	end
 end
 
 function on_message(self, message_id, message, sender)
@@ -41,9 +54,16 @@ function on_input(self, action_id, action)
 		return false
 	end
 	debugger:printer("Printing action id: " .. action_id)
-	for k, v in pairs(action) do 
-		debugger:printer("Printing key: " .. tostring(k))
-		debugger:printer("Printing value: " .. tostring(v))
+	local action_id_stripped, action_number = string.match(hash_to_string(action_id), "(.*)%-(.*)")
+	action_number = tonumber(action_number)
+	debugger:printer("Printing action: " .. action_id_stripped)
+	debugger:printer("Printing action number: " .. action_number)
+	local playerNumber = go.get(nil, "PlayerNumber")
+	if playerNumber ~= action_number then
+		return
+	end
+	if action_id_stripped == "Up"  or action_id_stripped == "Down"  or action_id_stripped == "Left" or action_id_stripped == "Right" then
+		storedInput.Input[playerNumber] = action_id_stripped
 	end
 	return false
 end
