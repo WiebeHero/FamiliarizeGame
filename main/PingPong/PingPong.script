@@ -38,7 +38,6 @@ function fixed_update(self, dt)
 	local collisionUrl = msg.url(nil, nil, "collisionobject")
 	local vector3 = go.get(collisionUrl, "linear_velocity")
 	debugger:printer("Velocity: X: " .. vector3.x .. " Y: " .. vector3.y .. " Z: " .. vector3.z)
-	local didInput = false
 	local speed, maxSpeed = self.Speed, self.MaxSpeed
 	debugger:printer("Speed: " .. speed .. " MaxSpeed: " .. maxSpeed)
 	if storedInput.Input[playerNumber] == "Up" then
@@ -49,7 +48,6 @@ function fixed_update(self, dt)
 		end
 		go.set(collisionUrl, "linear_velocity", vector3)
 		storedInput.Input[playerNumber] = ""
-		didInput = true
 	end
 	if storedInput.Input[playerNumber] == "Down" then
 		debugger:printer("Going down!")
@@ -59,10 +57,6 @@ function fixed_update(self, dt)
 		end
 		go.set(collisionUrl, "linear_velocity", vector3)
 		storedInput.Input[playerNumber] = ""
-		didInput = true
-	end
-	if didInput then
-		return
 	end
 end
 

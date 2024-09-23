@@ -1,5 +1,15 @@
+go.property("PlayerToAddScoreTo", 0)
+local debugger
+
+function init(self)
+	if debugger == nil then
+		debugger = Debugger:new()
+	end
+	debugger:printerinit(self, "Starting ping pong goal script...")
+end
+
 function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
+	if message_id == hash("collision_response") then
+		debugger:printer("Collision with goal!")
+	end
 end

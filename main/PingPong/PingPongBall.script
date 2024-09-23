@@ -6,12 +6,10 @@ function init(self)
 	if debugger == nil then
 		debugger = Debugger:new()
 	end
-	debugger:printerinit(self, "Starting ping pong ball script")
+	debugger:printerinit(self, "Starting ping pong ball script...")
 	local vector3 = vmath.vector3(self.Speed, 0, 0)
 	local collisionUrl = msg.url(nil, nil, "collisionobject")
 	go.set(collisionUrl, "linear_velocity", vector3)
-	debugger:printer(tostring(msg.url()))
-	msg.post("main:/Gui#PingPongData", "Test", {Test = "Test"})
 end
 
 function fixed_update(self, dt)

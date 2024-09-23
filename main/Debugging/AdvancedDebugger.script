@@ -18,6 +18,14 @@ function Debugger:printerinit(target, message)
 	print(strippedScriptName.. " | Printed from: " .. debug.getinfo(2).currentline .. ": " .. message)
 end
 
+function Debugger:printer_init_simple(message, should_debug)
+	local url = msg.url()
+	self.shouldDebug[#self.shouldDebug + 1] = should_debug
+	self.scriptName[#self.scriptName + 1] = msg.url(url)
+	local strippedScriptName = string.sub(tostring(self.scriptName[#self.scriptName]), 6)
+	print(strippedScriptName.. " | Printed from: " .. debug.getinfo(2).currentline .. ": " .. message)
+end
+
 function Debugger:printer(message)
 	if type(message) ~= "string" and self.scriptName == nil or #self.scriptName == 0 then
 		print("The debugger does not have enough info to formulate properly.")
