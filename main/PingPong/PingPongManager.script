@@ -1,4 +1,5 @@
 --Manages the ping pong scores.
+go.property("Countdown", 0.0)
 debugger = nil
 local scoreLeft, scoreRight
 
@@ -9,10 +10,29 @@ function init(self)
 	scoreRight = 0
 	debugger:printer("Ping pong manager started!")
 	msg.post(".", "acquire_input_focus")
+	msg.post("main:/Gui#PingPongData", "SetCountdown", {Countdown = self.Countdown})
+	self.handle = timer.delay(1, true, function ()
+		if self.Countdown - 1 <= 0 then
+			msg.post("main:/Gui#PingPongData", "CountdownVisibility", {Visibility = true})
+			msg.post("main:/Ball#PingPongBall", "ReleaseBall")
+			timer.cancel(self.handle)
+			return
+		end
+		self.Countdown = self.Countdown - 1
+		msg.post("main:/Gui#PingPongData", "CountdownUpdate", {Score = self.Countdown})
+	end)
 end
 
 function on_message(self, message_id, message, sender)
-	
+	if message_id == hash("AddScore") then
+		if message.PlayerToAddScoreTo == 1 then
+			scoreLeft = scoreLeft + 1
+			msg.post("", message_id)
+		end
+		if message.PlayerToAddScoreTo == 2 then
+			scoreRight = scoreRight + 1
+		end
+	end
 end
 
 function on_input(self, action_id, action)

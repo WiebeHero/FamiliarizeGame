@@ -6,10 +6,8 @@ function init(self)
 	if debugger == nil then
 		debugger = Debugger:new()
 	end
+	self.Position = go.get_position()
 	debugger:printerinit(self, "Starting ping pong ball script...")
-	local vector3 = vmath.vector3(self.Speed, 0, 0)
-	local collisionUrl = msg.url(nil, nil, "collisionobject")
-	go.set(collisionUrl, "linear_velocity", vector3)
 end
 
 function fixed_update(self, dt)
@@ -21,6 +19,17 @@ end
 
 function on_message(self, message_id, message, sender)
 	debugger:printer("Message identification: " .. message_id)
+	if message_id == hash("ReleaseBall") then
+		local vector3 = vmath.vector3(0, self.Speed, 0)
+		local collisionUrl = msg.url(nil, nil, "collisionobject")
+		vector3 = rotate_vector(vector3, math.random(180) - 180)
+		go.set(collisionUrl, "linear_velocity", vector3)
+	end
+	if message_id == hash("ResetBall") then
+		go.set_position(self.Position)
+		local collisionUrl = msg.url(nil, nil, "collisionobject")
+		go.set(collisionUrl, "linear_velocity", vmath.vector3(0, 0, 0))
+	end
 	if message_id ~= hash("contact_point_response") then
 		return
 	end

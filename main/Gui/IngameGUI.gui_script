@@ -21,7 +21,26 @@ end
 
 function on_message(self, message_id, message, sender)
 	debugger:printer(message_id)
-	if message_id == hash("Test") then
+	if message_id == hash("SetCountdown") then
+		debugger:printer("Processing " .. message_id .. "...")
+		local countdownText = gui.get_node("Countdown")
+		gui.set_text(countdownText, tostring(message.Countdown))
+	end
+	if message_id == hash("CountdownUpdate") then
+		debugger:printer("Processing " .. message_id .. "...")
+		local countdownText = gui.get_node("Countdown")
+		gui.set_text(countdownText, tostring(message.Score))
+	end
+	if message_id == hash("CountdownVisibility") then
+		debugger:printer("Processing " .. message_id .. "...")
+		local countdownText = gui.get_node("Countdown")
+		if message.Visibility then
+			gui.set_alpha(countdownText, 1.0)
+		else
+			gui.set_alpha(countdownText, 0.0)
+		end
+	end
+	if message_id == hash("ScoreUpdate") then
 		
 	end
 end

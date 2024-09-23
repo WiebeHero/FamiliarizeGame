@@ -9,7 +9,12 @@ function init(self)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("collision_response") then
-		debugger:printer("Collision with goal!")
+	debugger:printer("Message ID: " .. message_id)
+	if message_id == hash("trigger_response") then
+		if message.enter then
+			debugger:printer("Collision with goal!")
+			msg.post("main:/PingPongManagerObject#PingPongManager", "AddScore", {PlayerToAddTo = self.PlayerToAddScoreTo})
+			msg.post("main:/Ball#PingPongBall", "ResetBall")
+		end
 	end
 end
