@@ -1,4 +1,6 @@
 go.property("PlayerToAddScoreTo", 0)
+go.property("ManagerUrl", msg.url())
+go.property("BallUrl", msg.url())
 local debugger
 
 function init(self)
@@ -13,8 +15,8 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("trigger_response") then
 		if message.enter then
 			debugger:printer("Collision with goal!")
-			msg.post("main:/PingPongManagerObject#PingPongManager", "AddScore", {PlayerToAddTo = self.PlayerToAddScoreTo})
-			msg.post("main:/Ball#PingPongBall", "ResetBall")
+			msg.post(self.ManagerUrl, "AddScore", {PlayerToAddTo = self.PlayerToAddScoreTo})
+			msg.post(self.BallUrl, "ResetBall")
 		end
 	end
 end

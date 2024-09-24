@@ -1,5 +1,6 @@
 go.property("Speed", 0)
 go.property("SpeedMultiplier", 0)
+go.property("RotationOnHit", 0)
 local debugger
 
 function init(self)
@@ -22,6 +23,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("ReleaseBall") then
 		local vector3 = vmath.vector3(0, self.Speed, 0)
 		local collisionUrl = msg.url(nil, nil, "collisionobject")
+		math.randomseed(os.time())
 		vector3 = rotate_vector(vector3, math.random(180) - 180)
 		go.set(collisionUrl, "linear_velocity", vector3)
 	end
@@ -42,7 +44,7 @@ function on_message(self, message_id, message, sender)
 	local vector3 = go.get(collisionUrl, "linear_velocity")
 	debugger:printer("Normal: " .. message.normal)
 	math.randomseed(os.time())
-	go.set(collisionUrl, "linear_velocity", rotate_vector(message.normal * vmath.length(go.get(collisionUrl, "linear_velocity")), math.random(150) - 75))
+	go.set(collisionUrl, "linear_velocity", rotate_vector(message.normal * vmath.length(go.get(collisionUrl, "linear_velocity")), math.random(self.RotationOnHit * 2.0) - self.RotationOnHit))
 end
 
 function rotate_vector(vector3, degrees)

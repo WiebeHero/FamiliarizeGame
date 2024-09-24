@@ -17,18 +17,6 @@ function init(self)
 	msg.post(".", "acquire_input_focus")
 end
 
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function update(self, dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
 function fixed_update(self, dt)
 	local playerNumber = go.get(nil, "PlayerNumber")
 	if msg.url(self.url) ~= storedInput.Id[playerNumber] then
@@ -77,14 +65,4 @@ function on_input(self, action_id, action)
 		storedInput.Input[playerNumber] = action_id_stripped
 	end
 	return false
-end
-
-function on_message(self, message_id, message, sender)
-	
-end
-
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
-	-- Remove this function if not needed
 end
